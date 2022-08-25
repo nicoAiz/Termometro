@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/style.css">
+  <title>Termômetro</title>
+</head>
+<body>
+  
+  <div class="container">
+
+    <h1>Termômetro</h1>
+
+    <select name="pEscala" id="pEscala">
+      <option value="Celsius">Celsius</option>
+      <option value="Kelvin">Kelvin</option>
+      <option value="Fahrenheit">Fahrenheit</option>
+    </select>
+
+    <input type="number" name="pValorEscala" id="pValorEscala">
+
+    <select name="sEscala" id="sEscala">
+      <option value="Celsius">Celsius</option>
+      <option value="Kelvin">Kelvin</option>
+      <option value="Fahrenheit">Fahrenheit</option>
+    </select>
+
+    <button onclick="converterEscala()">Converter</button>
+      
+    <div class="result hidden">
+
+    </div>
+
+  </div>
+
+  <script src="scripts/script.js"></script>
+</body>
+</html>
