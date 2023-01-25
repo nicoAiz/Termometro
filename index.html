@@ -4,37 +4,32 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/reset.css">
   <link rel="stylesheet" href="styles/style.css">
+  <script defer src="scripts/script.js"></script>
   <title>Termômetro</title>
 </head>
 <body>
-  
-  <div class="container">
+  <div id="container">
+    <h1 id="title">Termômetro</h1>
 
-    <h1>Termômetro</h1>
-
-    <select name="pEscala" id="pEscala">
-      <option value="Celsius">Celsius</option>
-      <option value="Kelvin">Kelvin</option>
-      <option value="Fahrenheit">Fahrenheit</option>
+    <select name="from-unit" class="select-unit">
+      <option value="C">Celsius</option>
+      <option value="K">Kelvin</option>
+      <option value="F">Fahrenheit</option>
     </select>
 
-    <input type="number" name="pValorEscala" id="pValorEscala">
+    <input type="number" name="input-value" id="user-value">
 
-    <select name="sEscala" id="sEscala">
-      <option value="Celsius">Celsius</option>
-      <option value="Kelvin">Kelvin</option>
-      <option value="Fahrenheit">Fahrenheit</option>
+    <select name="to-unit" class="select-unit">
+      <option value="C">Celsius</option>
+      <option value="K">Kelvin</option>
+      <option value="F">Fahrenheit</option>
     </select>
 
-    <button onclick="converterEscala()">Converter</button>
+    <button id="convert-button" data-btn-convert>Converter</button>
       
-    <div class="result hidden">
-
-    </div>
-
+    <div class="result hidden"></div>
   </div>
-
-  <script src="scripts/script.js"></script>
 </body>
 </html>
