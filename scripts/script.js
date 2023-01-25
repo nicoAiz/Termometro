@@ -1,120 +1,106 @@
-let pEscalaOptions = document.getElementById("pEscala");
-let sEscalaOptions = document.getElementById("sEscala");
+// Interação com o DOM
+document.querySelector('[data-btn-convert]').addEventListener('click', buttonPressed)
+document.querySelector('[name=input-value]').addEventListener('keydown', e => e.key === 'Enter' && buttonPressed())
 
-function converterEscala(paran1,paran2) {
-  let pEscalaResult = pEscalaOptions.options[pEscalaOptions.selectedIndex];
-  let sEscalaResult = sEscalaOptions.options[sEscalaOptions.selectedIndex];
+function buttonPressed() {
+  const fromUnitElem = document.querySelector('[name=from-unit]')
+  const toUnitElem = document.querySelector('[name=to-unit]')
+  const fromUnit = fromUnitElem.options[fromUnitElem.selectedIndex].value
+  const toUnit = toUnitElem.options[toUnitElem.selectedIndex].value
+  
+  const inputValue = parseFloat(document.querySelector('[name=input-value]').value)
+  if (!inputValue) return displayError('Insira um valor válido.')
 
-  let pInput = document.getElementById("pValorEscala").value;
+  // Conversão
+  const converted = convertUnits(fromUnit, toUnit, inputValue)
 
-  paran1 = pEscalaResult.value;
-  paran2 = sEscalaResult.value;
+  // Checagem de erros
+  if (!converted) return displayError('Escolha escalas diferentes.')
+  if (isNaN(converted.value)) return console.error('Socorro, joão!')
+  
+  // Exibição de dados
+  displayValue(converted.value, converted.celsiusValue)
+}
 
-  switch(paran1 + paran2) {
-    case "CelsiusFahrenheit": {
-      let res = calc_C_F(pInput);
-      displayResult(res, calc_F_C(res));
-      break;
+function convertUnits(fromUnit, toUnit, value) {
+  switch(fromUnit + toUnit) {
+    case 'CF': {
+      const newValue = calc_C_F(value)
+      return {
+        value: newValue,
+        celsiusValue: calc_F_C(newValue)
+      }
     }
 
-    case "CelsiusKelvin":{
-      let res = calc_C_K(pInput);
-      displayResult(res, calc_K_C(res));
-      break;
+    case 'CK': {
+      const newValue = calc_C_K(value)
+      return {
+        value: newValue,
+        celsiusValue: calc_K_C(newValue)
+      }
     }
       
-    case "KelvinCelsius":{
-      let res = calc_K_C(pInput);
-      displayResult(res, res);
-      break;
+    case 'KC': {
+      const newValue = calc_K_C(value)
+      return {
+        value: newValue,
+        celsiusValue: newValue
+      }
     }
 
-    case "KelvinFahrenheit": {
-      let res = calc_K_F(pInput);
-      displayResult(res, calc_F_C(res));
-      break;
+    case 'KF': {
+      const newValue = calc_C_F(calc_K_C(value))
+      return {
+        value: newValue,
+        celsiusValue: calc_F_C(newValue)
+      }
     }
 
-    case "FahrenheitCelsius": {
-      let res = calc_F_C(pInput);
-      displayResult(res, res);
-      break;
+    case 'FC': {
+      const newValue = calc_F_C(value)
+      return {
+        value: newValue,
+        celsiusValue: newValue
+      }
     }
 
-    case "FahrenheitKelvin": {
-      let res = calc_F_K(pInput);
-      displayResult(res, calc_K_C(res));
-      break;
+    case 'FK': {
+      const newValue = calc_C_K(calc_F_C(value))
+      return {
+        value: newValue,
+        celsiusValue: calc_K_C(newValue)
+      }
     }
-
-    default:
-      displayError();
-      break;
-  }
-  
-  if(pInput === "") {
-    displayNoInput();
-  }
-
-}
-
-function displayResult(res, celsius) {
-  let result = document.getElementsByClassName("result")[0];
-  let img = document.createElement("img");
-  
-  result.innerHTML = '<p>' + res.toFixed(0) + '</p>';
-  result.classList.remove("hidden");
-  
-  if(celsius >= 30) {
-    img.src = "images/hot.svg";
-    result.appendChild(img);
-  } else if(celsius <= 0) {
-    img.src = "images/cold.svg";
-    result.appendChild(img);
-  } else {
-    img.src = "images/warm.svg";
-    result.appendChild(img);
   }
 }
 
-function displayError() {
-  let result = document.getElementsByClassName("result")[0];
-  result.innerHTML = "Coloque escalas diferentes!";
-  result.classList.remove("hidden");
+// Funções que interagem com o DOM
+function displayValue(value, valueInCalsius) {
+  document.querySelector('.result').innerHTML = `
+    <p>${Math.round(value)}</p>
+    <img src='images/${valueInCalsius >= 30 ? 'hot' : valueInCalsius <= 0 ? 'cold' : 'warm'}.svg'>
+  `
 }
 
-function displayNoInput() {
-  let result = document.getElementsByClassName("result")[0];
-  result.innerHTML = "Defina um valor válido!";
-  result.classList.remove("hidden");
+function displayError(errorMessage) {
+  const resultElem = document.querySelector('.result')
+  resultElem.innerHTML = errorMessage
+  resultElem.classList.remove('hidden')
+}
+
+// Funções de conversão
+function calc_K_C(value) {
+  return value - 273
+}
+
+function calc_F_C(value) {
+  return (value - 32) / 1.8
 }
 
 function calc_C_F(value) {
-  let C = parseFloat(value);
-  return C * 1.8 + 32;
+  return value * 1.8 + 32
 }
 
 function calc_C_K(value) {
-  let C = parseFloat(value);
-  return C + 273;
-}
-
-function calc_K_C(value) {
-  let K = parseFloat(value);
-  return K - 273;
-}
-
-function calc_K_F(value) {
-  let K = parseFloat(value);
-  return (K-273) * 1.8 + 32;
-} 
-
-function calc_F_C(value) {
-  let F = parseFloat(value);
-  return (F-32) / 1.8;
-}
-
-function calc_F_K(value) {
-  let F = parseFloat(value);
-  return (F-32) * 5 / 9 + 273;
+  return value + 273
 }
