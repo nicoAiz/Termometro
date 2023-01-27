@@ -10,18 +10,20 @@ function buttonPressed() {
   
   const inputValue = parseFloat(document.querySelector('[name=input-value]').value)
   if (!inputValue) return displayError('Insira um valor válido.')
+  if (toUnit === fromUnit) return displayError('Escolha escalas diferentes.')
 
   // Conversão e checagem de erros
   const converted = convertUnits(fromUnit, toUnit, inputValue)
-  if (converted == null) return displayError('Escolha escalas diferentes.')
+  if (converted == null) return displayError('Algo deu errado.')
   
   // Exibição de dados
-  const inCelsius = toUnit === 'C' ? converted : convertUnits(toUnit, 'C', converted)
+  const inCelsius = convertUnits(toUnit, 'C', converted)
   displayValue(converted, inCelsius)
 }
 
 function convertUnits(fromUnit, toUnit, value) {
   switch(fromUnit + toUnit) {
+    case 'CC': case 'KK': case 'FF': return value
     case 'CF': return calc_C_F(value)
     case 'CK': return calc_C_K(value)
     case 'KC': return calc_K_C(value)
