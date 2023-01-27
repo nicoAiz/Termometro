@@ -11,66 +11,23 @@ function buttonPressed() {
   const inputValue = parseFloat(document.querySelector('[name=input-value]').value)
   if (!inputValue) return displayError('Insira um valor válido.')
 
-  // Conversão
+  // Conversão e checagem de erros
   const converted = convertUnits(fromUnit, toUnit, inputValue)
-
-  // Checagem de erros
-  if (!converted) return displayError('Escolha escalas diferentes.')
-  if (isNaN(converted.value)) return console.error('Socorro, joão!')
+  if (converted == null) return displayError('Escolha escalas diferentes.')
   
   // Exibição de dados
-  displayValue(converted.value, converted.celsiusValue)
+  const inCelsius = toUnit === 'C' ? converted : convertUnits(toUnit, 'C', converted)
+  displayValue(converted, inCelsius)
 }
 
 function convertUnits(fromUnit, toUnit, value) {
   switch(fromUnit + toUnit) {
-    case 'CF': {
-      const newValue = calc_C_F(value)
-      return {
-        value: newValue,
-        celsiusValue: calc_F_C(newValue)
-      }
-    }
-
-    case 'CK': {
-      const newValue = calc_C_K(value)
-      return {
-        value: newValue,
-        celsiusValue: calc_K_C(newValue)
-      }
-    }
-      
-    case 'KC': {
-      const newValue = calc_K_C(value)
-      return {
-        value: newValue,
-        celsiusValue: newValue
-      }
-    }
-
-    case 'KF': {
-      const newValue = calc_C_F(calc_K_C(value))
-      return {
-        value: newValue,
-        celsiusValue: calc_F_C(newValue)
-      }
-    }
-
-    case 'FC': {
-      const newValue = calc_F_C(value)
-      return {
-        value: newValue,
-        celsiusValue: newValue
-      }
-    }
-
-    case 'FK': {
-      const newValue = calc_C_K(calc_F_C(value))
-      return {
-        value: newValue,
-        celsiusValue: calc_K_C(newValue)
-      }
-    }
+    case 'CF': return calc_C_F(value)
+    case 'CK': return calc_C_K(value)
+    case 'KC': return calc_K_C(value)
+    case 'KF': return calc_C_F(calc_K_C(value))
+    case 'FC': return calc_F_C(value)
+    case 'FK': return calc_C_K(calc_F_C(value))
   }
 }
 
